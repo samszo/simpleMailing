@@ -11,7 +11,7 @@ Application web minimaliste pour gérer l'envoi d'emails en s'appuyant sur l'API
 ## Lancer l'application
 
 ```bash
-python app.py --host 0.0.0.0 --port 8080
+python app.py --host 127.0.0.1 --port 8080
 ```
 
 Puis ouvrir : `http://localhost:8080`

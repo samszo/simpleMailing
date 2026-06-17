@@ -42,6 +42,21 @@ class ListmonkClientTests(unittest.TestCase):
         with self.assertRaises(ListmonkAPIError):
             client.send_campaign([1], "sender@example.com", "Sujet", "<p>Hello</p>")
 
+    def test_send_campaign_retries_with_post_when_put_fails(self):
+        client = ListmonkClient("http://localhost:9000", "admin", "secret")
+        client._request = MagicMock(
+            side_effect=[
+                {"data": {"id": 42}},
+                ListmonkAPIError("PUT failed"),
+                {},
+            ]
+        )
+
+        result = client.send_campaign([1], "sender@example.com", "Sujet", "<p>Hello</p>")
+
+        self.assertEqual(result, {"id": 42})
+        self.assertEqual(client._request.call_count, 3)
+
 
 if __name__ == "__main__":
     unittest.main()

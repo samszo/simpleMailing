@@ -339,7 +339,7 @@ def run_server(host: str, port: int) -> None:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Application web simple pour piloter Listmonk")
-    parser.add_argument("--host", default="0.0.0.0", help="Adresse d'écoute")
+    parser.add_argument("--host", default="127.0.0.1", help="Adresse d'écoute")
     parser.add_argument("--port", default=8080, type=int, help="Port d'écoute")
     return parser.parse_args()
 
