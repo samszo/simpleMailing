@@ -118,7 +118,12 @@ class MailingHandler(BaseHTTPRequestHandler):
     server_version = "simpleMailing/1.0"
 
     def _read_form(self) -> dict[str, list[str]]:
-        length = int(self.headers.get("Content-Length", "0"))
+        try:
+            length = int(self.headers.get("Content-Length", "0"))
+        except ValueError:
+            length = 0
+        if length < 0:
+            length = 0
         body = self.rfile.read(length).decode("utf-8")
         return parse_qs(body, keep_blank_values=True)
 
@@ -201,7 +206,9 @@ class MailingHandler(BaseHTTPRequestHandler):
                     content=body,
                 )
                 message = f"Campagne {send_result['id']} créée et démarrée."
-            except (ValueError, ListmonkAPIError) as exc:
+            except ValueError:
+                error = "Identifiants de liste invalides."
+            except ListmonkAPIError as exc:
                 error = str(exc)
 
         if api_url and username and password:
